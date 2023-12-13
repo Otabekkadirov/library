@@ -55,7 +55,7 @@ function closeModal() {
 function displayBooks() {
     const booksGrid = document.querySelector(".books-grid");
     booksGrid.innerHTML = "";
-    BOOKS.forEach((book) => {
+    BOOKS.forEach((book, index) => {
         const newBookCard = document.createElement("div");
         newBookCard.className = "book-card";
 
@@ -66,10 +66,10 @@ function displayBooks() {
                     <div class="btn-group">
                         ${
                             book.isRead
-                                ? `<button class="btn btn-green">Read</button>`
-                                : `<button class="btn btn-red">Not Read</button>`
+                                ? `<button class="btn btn-green" onclick="toggleRead(${index})">Read</button>`
+                                : `<button class="btn btn-red" onclick="toggleRead(${index})">Not Read</button>`
                         }
-                        <button class="btn btn-remove">Remove</button>
+                        <button class="btn btn-remove" onclick="removeBook(${index})">Remove</button>
                     </div>
     `;
         booksGrid.append(newBookCard);
@@ -80,4 +80,18 @@ function displayBooks() {
 
 function setBooks() {
     localStorage.setItem("books", JSON.stringify(BOOKS));
+}
+
+function toggleRead(id) {
+    BOOKS = BOOKS.map((kitob, index) =>
+        id === index ? { ...kitob, isRead: !kitob.isRead } : { ...kitob }
+    );
+    setBooks();
+    displayBooks();
+}
+
+function removeBook(id) {
+    BOOKS = BOOKS.filter((kitob, index) => id != index);
+    setBooks();
+    displayBooks();
 }
